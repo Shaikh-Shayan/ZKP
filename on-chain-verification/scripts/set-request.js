@@ -2,20 +2,20 @@ async function main() {
   const circuitId = "credentialAtomicQuerySig";
   const validatorAddress = "0xb1e86C4c687B85520eF4fd2a0d14e81970a15aFB";
 
-  const schemaHash = "f03ac39aa54a5a2770a30f17d8042507"; // extracted from PID Platform
+  const schemaHash = "ce9a99f0ef3d8d4d4d8a79a374594b29"; // extracted from PID Platform
 
   const schemaEnd = fromLittleEndian(hexToBytes(schemaHash));
 
   const query = {
     schema: ethers.BigNumber.from(schemaEnd),
     slotIndex: 2,
-    operator: 2,
-    value: [20020101, ...new Array(63).fill(0).map((i) => 0)],
+    operator: 1,
+    value: [0, ...new Array(63).fill(0).map((i) => 0)],
     circuitId,
   };
 
   // add the address of the contract just deployed
-  ERC20VerifierAddress = "0x930Ad84f48Ab7a9E2F7331eBd41B7263398a58c8";
+  ERC20VerifierAddress = "0xE38993E35c60DD12799815691403E558E5E8Cfb1";
 
   let erc20Verifier = await hre.ethers.getContractAt(
     "ERC20Verifier",
