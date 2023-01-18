@@ -1,4 +1,4 @@
-## 1. Creating claim schema on PolygonID
+## Creating claim schema on PolygonID
 
 [https://platform-test.polygonid.com/](https://platform-test.polygonid.com/)
 
@@ -19,6 +19,12 @@ These information about claims will be used in further steps.
 
 ## Clone and install dependencies
 
+```jsx
+git clone git@github.com:reveation-labs/ZKPexperiment.git
+cd ZKPexperiment
+npm install
+```
+
 ## Deploy Smart Contracts
 
 Steps to deploy the smart contracts of the ZK Airdrop Verifier is given [here](https://github.com/reveation-labs/ZKPexperiment/blob/master/on-chain-verification/README.md).
@@ -33,6 +39,50 @@ The deployed contract address will displayed after running deply.js.
 const validatorAddress = "0xb1e86C4c687B85520eF4fd2a0d14e81970a15aFB";
 ```
 
-## 4. Set Request script
+## Set Request script
 
-## 5. ZK client
+Run set-request to send the zk request to the smart contract:
+
+```jsx
+npx hardhat run --network mumbai scripts/set-request.js
+```
+
+This command will help set the query to the validator
+
+```jsx
+const circuitId = "credentialAtomicQuerySig";
+
+/*
+	This is the already deployed contract that will validate the claim query according to the protocol.
+	*/
+const validatorAddress = "0xb1e86C4c687B85520eF4fd2a0d14e81970a15aFB";
+
+/*
+	Extracted from PolygonID platform after creating the claim.
+	*/
+const schemaHash = "ce9a99f0ef3d8d4d4d8a79a374594b29";
+const schemaEnd = fromLittleEndian(hexToBytes(schemaHash));
+const query = {
+  schema: ethers.BigNumber.from(schemaEnd),
+
+  //todo:
+  slotIndex: 2,
+
+  // see - https://0xpolygonid.github.io/tutorials/verifier/verification-library/zk-query-language/
+  // 1 = equals
+  // 2 = less-than
+  // 3 = greater-than
+  // 4 = in
+  // 5 = not-in
+  operator: 1,
+
+  // Change to 0 or value that you want to use.
+  value: [0, ...new Array(63).fill(0).map((i) => 0)],
+  circuitId,
+};
+
+// add the address of the contract just deployed
+ERC20VerifierAddress = "0xE38993E35c60DD12799815691403E558E5E8Cfb1";
+```
+
+## ZK client
